@@ -197,6 +197,36 @@ void bfs(void)
     }
 }
 
+void print_data(void)
+{
+    freopen("data.csv","w",stdout);
+    for(int i = 0; i <= DIM * DIM; i++){
+        if(i)cout << ',';
+        cout << i;
+    }
+    cout << endl;
+    int p = SAMPLE_COUNT;
+    memset(vis, 0, sizeof(vis));
+    while(p--){
+        while(true){
+            int now = ((long long)rand() * (long long)rand()) % cnt;
+            if(vis[now])continue;
+            vis[now] = 1;
+            for(int i = 0; i < DIM * DIM; i++){
+                if(i)cout << ',';
+                if(allstate[now][i] == '.')cout << 1;
+                else if(allstate[now][i] == 'I')cout << 2;
+                else if(allstate[now][i] == '0')cout << 3;
+                else if(allstate[now][i] == '#')cout << 4;
+                else if(allstate[now][i] == '*')cout << 5;
+                else cout << 6;
+            }
+            cout << ',' << opt_move[now] << endl;
+            break;
+        }
+    }
+}
+
 int main()
 {
     generate_states();
@@ -212,7 +242,9 @@ int main()
 
     bfs();
 
+    print_data();
 
+/*
     string str = "\
 ........\
 ........\
@@ -232,6 +264,8 @@ int main()
     }
 
     print_state(str);
+
+*/
 
 /*
     while(true){
