@@ -27,6 +27,9 @@ def main():
     X = data.iloc[:, 0:64]
     Y = data.iloc[:, 64]
 
+    print(type(X))
+    print(type(Y))
+
     clf.fit(X, Y)
     
     res = clf.predict(X)

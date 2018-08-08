@@ -2,6 +2,11 @@ import pandas as pd
 from sklearn.externals import joblib
 import turtle
 import graphics
+import neural_network
+import numpy as np
+import random
+from tensorflow import keras
+
 NUM_FRUIT = 1
 DIM = 8
 X = [1, -1, 0, 0];
@@ -132,9 +137,9 @@ def print_grid(l, win):
 def give_me_grid():
     l = [1] * (DIM * DIM)
 
-    l[42] = 3
-    l[11] = 4
-    l[27] = 2
+    l[random.randrange(0, DIM * DIM)] = 2
+    l[random.randrange(0, DIM * DIM)] = 3
+    l[random.randrange(0, DIM * DIM)] = 4
     
     return l
 
@@ -144,8 +149,25 @@ def list_to_dataframe(l):
         p[i] = [l[i]]
     return pd.DataFrame.from_dict(p)
 
+def conv(l):
+    me = []
+    fruit = []
+    target = []
+
+    for i in range(DIM * DIM):
+        if(l[i] == 2 or l[i] == 6):
+            me.append(i)
+        if(l[i] == 3 or l[i] == 5):
+            fruit.append(i)
+        if(l[i] > 3):
+            target.append(i)
+
+    return [DIM] + me + fruit + target
+
 def main():
-    model = joblib.load('svm.pkl')
+    model = keras.models.load_model('game_model.h5')
+
+    """
     data = pd.read_csv('data.csv')
 
     data = data.iloc[0:1000]
@@ -157,14 +179,22 @@ def main():
     print(pr)
     return
 
+    """
+
     grid = give_me_grid()
 
     win = graphics.GraphWin('Game', 600, 600)
 
-    while not check_finished(grid):
-        print_grid(grid, win)
-        wh = model.predict(list_to_dataframe(grid))[0]
-        print(model.predict(list_to_dataframe(grid)))
+    while True:
+        keyh = print_grid(grid, win)
+        
+        if keyh == 'q':
+            grid = give_me_grid()
+            win.close()
+            win = graphics.GraphWin('Game', 600, 600)
+            continue
+        
+        wh = np.argmax(model.predict(np.array([conv(grid)]))[0])
         grid = move(grid, wh)
 
     print_grid(grid, win)
@@ -172,6 +202,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
 """
     l = [1] * 64
     l[6] = 6

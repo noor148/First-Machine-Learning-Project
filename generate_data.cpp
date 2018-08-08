@@ -176,6 +176,7 @@ bool is_finished(string str)
 }
 
 bool vis[MAX];
+bool vis2[MAX];
 
 void bfs(void)
 {
@@ -200,28 +201,42 @@ void bfs(void)
 void print_data(void)
 {
     freopen("data.csv","w",stdout);
-    for(int i = 0; i <= DIM * DIM; i++){
+    for(int i = 0; i < 3 + NUM_FRUIT + NUM_FRUIT; i++){
         if(i)cout << ',';
         cout << i;
     }
     cout << endl;
     int p = SAMPLE_COUNT;
-    memset(vis, 0, sizeof(vis));
     while(p--){
         while(true){
             int now = ((long long)rand() * (long long)rand()) % cnt;
-            if(vis[now])continue;
-            vis[now] = 1;
+            if(vis2[now] || !vis[now])continue;
+            vis2[now] = 1;
+            vector<int> me, fruit, target;
             for(int i = 0; i < DIM * DIM; i++){
-                if(i)cout << ',';
-                if(allstate[now][i] == '.')cout << 1;
-                else if(allstate[now][i] == 'I')cout << 2;
-                else if(allstate[now][i] == '0')cout << 3;
-                else if(allstate[now][i] == '#')cout << 4;
-                else if(allstate[now][i] == '*')cout << 5;
-                else cout << 6;
+
+                if(allstate[now][i] == 'I' || allstate[now][i] == 'L') me.push_back(i);
+                if(allstate[now][i] == '0' || allstate[now][i] == '*') fruit.push_back(i);
+                if(allstate[now][i] == '#' || allstate[now][i] == 'L' || allstate[now][i] == '*')target.push_back(i);
+
+
+//                if(i)cout << ',';
+//                if(allstate[now][i] == '.')cout << 1;
+//                else if(allstate[now][i] == 'I')cout << 2;
+//                else if(allstate[now][i] == '0')cout << 3;
+//                else if(allstate[now][i] == '#')cout << 4;
+//                else if(allstate[now][i] == '*')cout << 5;
+//                else cout << 6;
             }
+            //cout << ',' << opt_move[now] << endl;
+
+            cout << DIM;
+            for(int i = 0; i < me.size(); i++)cout << ',' << me[i];
+            for(int i = 0; i < fruit.size(); i++)cout << ',' << fruit[i];
+            for(int i = 0; i < target.size(); i++)cout << ',' << target[i];
+
             cout << ',' << opt_move[now] << endl;
+
             break;
         }
     }
@@ -242,9 +257,8 @@ int main()
 
     bfs();
 
-    print_data();
+    //print_data();
 
-/*
     string str = "\
 ........\
 ........\
@@ -264,8 +278,6 @@ int main()
     }
 
     print_state(str);
-
-*/
 
 /*
     while(true){
