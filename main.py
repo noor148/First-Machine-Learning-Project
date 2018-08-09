@@ -193,11 +193,13 @@ def main():
             win.close()
             win = graphics.GraphWin('Game', 600, 600)
             continue
+
+        if keyh == 'space':
+            break
         
         wh = np.argmax(model.predict(np.array([conv(grid)]))[0])
         grid = move(grid, wh)
 
-    print_grid(grid, win)
     win.close()
 
 if __name__ == "__main__":
