@@ -33,6 +33,7 @@ void print_state(string str)
     for(int i = 0; i < DIM; i++){
         for(int j = 0; j < DIM; j++){
             cout << str[i * DIM + j];
+            cout << 'New Line Added' << endl;
         }
         cout << endl;
     }
